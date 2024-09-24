@@ -1,2 +1,11 @@
-# L2D-IDJ
-Projeto inicial para a disciplina de IDJ na Universidade de Brasilia. Exemplar para ilustrar o trabalho que deve ser feito e guiar os alunos.
+# L2D-IDJ Exemplar
+
+Criado por Arthur da Silveira Couto, matricula 160002575
+
+#Compilacao
+
+No diretorio base do projeto execute o comando "make"
+
+#Execucao
+
+No diretorio base utilize o comando ./JOGO
