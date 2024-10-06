@@ -16,14 +16,14 @@ void TileMap::Load(std::string file){
 	maptxt >> mapWidth >> comma;
 	maptxt >> mapHeight >> comma;
 	maptxt >> mapDepth >> comma;
-	std::cout << mapWidth << " " << mapHeight << " " << mapDepth << "\n";
+	//std::cout << mapWidth << " " << mapHeight << " " << mapDepth << "\n";
 	tileMatrix.clear();
 	int aux;
 	int i;
 	for(i=0;i<(mapWidth*mapHeight*mapDepth);i++){
 		maptxt >> aux >> comma;
 		//aux--;
-		std::cout << aux << "\n";
+		//std::cout << aux << "\n";
 		tileMatrix.push_back(aux);
 	}
 	maptxt.close();

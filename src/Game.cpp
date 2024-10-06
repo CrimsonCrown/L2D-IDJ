@@ -3,6 +3,8 @@
 #include "SDL_include.h"
 
 #include "Game.h"
+#include "InputManager.h"
+#include "Resources.h"
 
 Game* Game::instance;
 
@@ -78,10 +80,14 @@ SDL_Renderer* Game::GetRenderer(){
 void Game::Run(){
 	while(state->QuitRequested()==false){
 		//std::cout << "in game debug\n";
+		InputManager::GetInstance().Update();
 		state->Update(0);
 		state->Render();
 		SDL_RenderPresent(renderer);
 		SDL_Delay(33);
 	}
+	Resources::ClearImages();
+	Resources::ClearMusics();
+	Resources::ClearSounds();
 	return;
 }

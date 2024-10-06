@@ -21,6 +21,7 @@ public:
 	bool Is(std::string type);
 private:
 	Sound deathSound;
+	Sound hitSound;
 	int hitpoints;
 };
 
