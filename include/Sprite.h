@@ -10,9 +10,9 @@
 class Sprite{
 public:
 	Sprite();
-	Sprite(const char* file, int frameCountW = 1, int frameCountH = 1);
+	Sprite(std::string file, int frameCountW = 1, int frameCountH = 1);
 	~Sprite();
-	void Open(const char* file);
+	void Open(std::string file);
 	void SetClip(int x, int y, int w, int h);
 	void Render(int x, int y, int w, int h);
 	int GetWidth();

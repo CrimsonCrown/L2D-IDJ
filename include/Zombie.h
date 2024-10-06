@@ -10,6 +10,7 @@
 
 #include "Component.h"
 #include "GameObject.h"
+#include "Sound.h"
 
 class Zombie : public Component{
 public:
@@ -19,6 +20,7 @@ public:
 	void Render();
 	bool Is(std::string type);
 private:
+	Sound deathSound;
 	int hitpoints;
 };
 
