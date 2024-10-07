@@ -4,6 +4,7 @@
 #include "InputManager.h"
 
 Zombie::Zombie(GameObject& associated) : Component(associated){
+	deathSound = Sound("Recursos/audio/Dead.wav");
 	hitpoints=100;
 	SpriteRenderer* newspr = new SpriteRenderer(associated, "Recursos/img/Enemy.png", 3, 2);
 	associated.AddComponent(newspr);
@@ -13,7 +14,6 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 	anims->AddAnimation("walking", Animation(0, 3, 10));
 	anims->AddAnimation("dead", Animation(5, 5, 0));
 	anims->SetAnimation("walking");
-	deathSound = Sound("Recursos/audio/Dead.wav");
 	hitSound = Sound("Recursos/audio/Hit0.wav");
 	return;
 }
@@ -28,7 +28,7 @@ void Zombie::Damage(int damage){
 		deathSound.Play(1);
 	}
 	else {
-		//((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("dead");
+		//((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("hit");
 		hitSound.Play(1);
 	}
 	return;
