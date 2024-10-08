@@ -7,6 +7,7 @@
 #include "Zombie.h"
 #include "TileMap.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 State::State(){
 	quitRequested=false;
@@ -15,6 +16,7 @@ State::State(){
 	//background
 	GameObject* bg = new GameObject();
 	SpriteRenderer* newspr = new SpriteRenderer((*bg), "Recursos/img/Background.png", 1, 1);
+	newspr->SetCameraFollower(true);
 	bg->AddComponent(newspr);
 	AddObject(bg);
 	//map
@@ -52,11 +54,12 @@ void State::Update(float dt){
 		GameObject* zombs = new GameObject();
 		Zombie* newzomb = new Zombie((*zombs));
 		zombs->AddComponent(newzomb);
-		zombs->box.x = InputManager::GetInstance().GetMouseX();
-		zombs->box.y = InputManager::GetInstance().GetMouseY();
+		zombs->box.x = InputManager::GetInstance().GetMouseX() + Camera::pos.x;
+		zombs->box.y = InputManager::GetInstance().GetMouseY() + Camera::pos.y;
 		AddObject(zombs);
 	}
 	long unsigned int index;
+	Camera::Update(dt);
 	for (index = 0; index < objectArray.size(); index++) {
 		objectArray[index]->Update(dt);
 	}

@@ -21,6 +21,7 @@ public:
 	void Render();
 	bool Is(std::string type);
 	void SetAnimation(Animation anim);
+	void SetCameraFollower(bool cf);
 private:
 	Sprite sprite;
 	int frameStart;

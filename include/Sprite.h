@@ -20,6 +20,7 @@ public:
 	bool IsOpen();
 	void SetFrame(int frame);
 	void SetFrameCount(int frameCountW, int frameCountH);
+	bool cameraFollower;
 private:
 	int frameCountW;
 	int frameCountH;

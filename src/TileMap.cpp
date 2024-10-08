@@ -1,6 +1,7 @@
 #include "TileMap.h"
 #include <fstream>
 #include "GameObject.h"
+#include "Camera.h"
 
 TileMap::TileMap(GameObject& associated, std::string file, TileSet* tileSet) : Component(associated){
 	//std::cout << "tried to make a map\n";
@@ -50,9 +51,13 @@ void TileMap::Render(){
 void TileMap::RenderLayer(int layer){
 	int x;
 	int y;
+	int offsetMultiplier = (mapDepth-1) - layer;
+	float offset = offsetMultiplier * 0.5;
+	float offsetX = Camera::pos.x*offset;
+	float offsetY = Camera::pos.y*offset;
 	for(x=0;x<mapWidth;x++){
 		for(y=0;y<mapHeight;y++){
-			tileSet->RenderTile(At(x,y,layer),associated.box.x+x*tileSet->GetTileWidth(),associated.box.y+y*tileSet->GetTileHeight());
+			tileSet->RenderTile(At(x,y,layer),associated.box.x+x*tileSet->GetTileWidth()+offsetX,associated.box.y+y*tileSet->GetTileHeight()+offsetY);
 		}
 	}
 	return;
