@@ -14,7 +14,7 @@ SpriteRenderer::SpriteRenderer(GameObject& associated) : Component(associated), 
 	return;
 }
 
-SpriteRenderer::SpriteRenderer(GameObject& associated, const char* file, int frameCountW, int frameCountH) : Component(associated), sprite(file, frameCountW, frameCountH) {
+SpriteRenderer::SpriteRenderer(GameObject& associated, std::string file, int frameCountW, int frameCountH) : Component(associated), sprite(file, frameCountW, frameCountH) {
 	frameStart = 0;
 	frameEnd = 0;
 	frameTime = 0;
@@ -25,7 +25,7 @@ SpriteRenderer::SpriteRenderer(GameObject& associated, const char* file, int fra
 	return;
 }
 
-void SpriteRenderer::Open(const char* file){
+void SpriteRenderer::Open(std::string file){
 	sprite.Open(file);
 	associated.box.w = sprite.GetWidth();
 	associated.box.h = sprite.GetHeight();
@@ -38,7 +38,7 @@ void SpriteRenderer::SetFrameCount(int frameCountW, int frameCountH) {
 
 void SpriteRenderer::Update(float dt) {
 	if (frameTime != 0) {
-		timeElapsed += 1;
+		timeElapsed += dt;
 		if (timeElapsed > frameTime) {
 			timeElapsed -= frameTime;
 			currentFrame += 1;
@@ -52,7 +52,7 @@ void SpriteRenderer::Update(float dt) {
 }
 
 void SpriteRenderer::Render(){
-	sprite.Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h);
+	sprite.Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h, associated.angleDeg);
 }
 
 bool SpriteRenderer::Is(std::string type) {
@@ -68,9 +68,28 @@ void SpriteRenderer::SetAnimation(Animation anim) {
 	frameTime = anim.frameTime;
 	currentFrame = frameStart;
 	sprite.SetFrame(currentFrame);
+	sprite.SetFlip(anim.flip);
 	timeElapsed = 0;
 }
 
 void SpriteRenderer::SetCameraFollower(bool cf) {
 	sprite.cameraFollower = cf;
+}
+
+void SpriteRenderer::SetScaleX(float scaleX, float scaleY) {
+	Vec2 oldCenter = associated.box.Center();
+	Vec2 oldScale = sprite.GetScale();
+	sprite.SetScaleX(scaleX,scaleY);
+	if (scaleX != 0) {
+		float xmult = scaleX / oldScale.x;
+		associated.box.w = associated.box.w*xmult;
+	}
+	if (scaleY != 0) {
+		float ymult = scaleY / oldScale.y;
+		associated.box.h = associated.box.h*ymult;
+	}
+	Vec2 newCenter = associated.box.Center();
+	Vec2 diff = oldCenter.Sub(newCenter);
+	associated.box = associated.box.Add(diff);
+	return;
 }

@@ -14,14 +14,15 @@
 class SpriteRenderer : public Component {
 public:
 	SpriteRenderer(GameObject& associated);
-	SpriteRenderer(GameObject& associated, const char* file, int frameCountW = 1, int frameCountH = 1);
-	void Open(const char* file);
+	SpriteRenderer(GameObject& associated, std::string file, int frameCountW = 1, int frameCountH = 1);
+	void Open(std::string file);
 	void SetFrameCount(int frameCountW, int frameCountH);
 	void Update(float dt);
 	void Render();
 	bool Is(std::string type);
 	void SetAnimation(Animation anim);
 	void SetCameraFollower(bool cf);
+	void SetScaleX(float scaleX, float scaleY);
 private:
 	Sprite sprite;
 	int frameStart;

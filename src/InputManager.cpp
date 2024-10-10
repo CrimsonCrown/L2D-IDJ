@@ -81,7 +81,7 @@ bool InputManager::IsKeyDown(int key){
 }
 
 bool InputManager::MousePress(int button){
-	std::cout << "mouse press\n";
+	//std::cout << "mouse press\n";
 	if(mouseUpdate[button]==updateCounter){
 		return mouseState[button];
 	}

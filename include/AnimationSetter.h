@@ -22,6 +22,7 @@ public:
 	void AddAnimation(std::string name, Animation anim);
 	void SetAnimation(std::string name);
 private:
+	std::string current;
 	std::unordered_map<std::string, Animation> animations;
 };
 

@@ -13,7 +13,7 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 	//newspr->SetAnimation(Animation(0,3,10));
 	AnimationSetter* anims = new AnimationSetter(associated);
 	associated.AddComponent(anims);
-	anims->AddAnimation("walking", Animation(0, 3, 10));
+	anims->AddAnimation("walking", Animation(0, 3, 0.5));
 	anims->AddAnimation("dead", Animation(5, 5, 0));
 	anims->AddAnimation("hit", Animation(4, 4, 0));
 	anims->SetAnimation("walking");
