@@ -1,5 +1,5 @@
-#ifndef BULLET_INCLUDE
-#define BULLET_INCLUDE
+#ifndef COLLIDER_INCLUDE
+#define COLLIDER_INCLUDE
 
 #define INCLUDE_SDL
 #define INCLUDE_SDL_MIXER
@@ -16,20 +16,18 @@
 #include "Camera.h"
 #include "Sprite.h"
 
-class Bullet : public Component{
+class Collider : public Component{
 public:
-	Bullet(GameObject& associated, float angle, float speed, int damage, float maxDistance, bool tp);
+	Collider(GameObject& associated, Vec2 scale={1,1}, Vec2 offset={0,0});
+	Rect box;
 	void Update(float dt);
-	void Start();
 	void Render();
 	bool Is(std::string type);
-	int GetDamage();
-	void NotifyCollision(GameObject& other);
-	bool targetsPlayer;
+	void SetScale(Vec2 scale);
+	void SetOffset(Vec2 offset);
 private:
-	Vec2 speed;
-	float distanceLeft;
-	int damage;
+	Vec2 scale;
+	Vec2 offset;
 };
 
 #endif

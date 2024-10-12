@@ -3,6 +3,11 @@
 #include "AnimationSetter.h"
 #include "InputManager.h"
 #include "Camera.h"
+#include "Collider.h"
+#include "Bullet.h"
+#include "Character.h"
+
+int Zombie::zombieCounter = 0;
 
 Zombie::Zombie(GameObject& associated) : Component(associated){
 	hitting = false;
@@ -14,11 +19,20 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 	AnimationSetter* anims = new AnimationSetter(associated);
 	associated.AddComponent(anims);
 	anims->AddAnimation("walking", Animation(0, 3, 0.5));
+	anims->AddAnimation("walkingLeft", Animation(0, 3, 0.5, SDL_FLIP_HORIZONTAL));
 	anims->AddAnimation("dead", Animation(5, 5, 0));
 	anims->AddAnimation("hit", Animation(4, 4, 0));
+	anims->AddAnimation("hitLeft", Animation(4, 4, 0, SDL_FLIP_HORIZONTAL));
 	anims->SetAnimation("walking");
 	hitSound = Sound("Recursos/audio/Hit0.wav");
+	zombieCounter++;
+	movingleft = false;
 	return;
+}
+
+void Zombie::Start() {
+	Collider* newcol = new Collider((associated));
+	associated.AddComponent(newcol);
 }
 
 void Zombie::Damage(int damage){
@@ -32,7 +46,12 @@ void Zombie::Damage(int damage){
 		deathSound.Play(1);
 	}
 	else {
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("hit");
+		if (movingleft) {
+			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("hitLeft");
+		}
+		else {
+			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("hit");
+		}
 		hitTimer.Restart();
 		hitting = true;
 		hitSound.Play(1);
@@ -45,18 +64,52 @@ void Zombie::Update(float dt){
 	deathTimer.Update(dt);
 	if (hitpoints > 0) {
 		if (hitting == true && hitTimer.Get() > 0.5) {
-			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walking");
+			if (movingleft) {
+				((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingLeft");
+			}
+			else {
+				((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walking");
+			}
 			hitting = false;
 		}
-		if (InputManager::GetInstance().MousePress(SDL_BUTTON_LEFT)) {
+		if (hitting == false) {
+			if (Character::player != nullptr) {
+				//std::cout << "walkin!\n";
+				Vec2 target = Character::player->Position();
+				Vec2 diff = target.Sub(associated.box.Center()).Normal().Mul(125*dt);
+				//std::cout << "movement: " << diff.x << " " << diff.y << "\n";
+				associated.box=associated.box.Add(diff);
+				bool isLeft = diff.x < 0;
+				bool changedDirection = movingleft != isLeft;
+				//std::cout << isLeft << movingleft << changedDirection << "\n";
+				if (changedDirection) {
+					movingleft = isLeft;
+					if (movingleft) {
+						((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingLeft");
+						//std::cout << "going left yay!!!\n";
+					}
+					else {
+						((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walking");
+						//std::cout << "going right? nay!!!\n";
+					}
+				}
+			}
+		}
+		/*if (InputManager::GetInstance().MousePress(SDL_BUTTON_LEFT)) {
 			if (associated.box.Contains({ (float)InputManager::GetInstance().GetMouseX() + Camera::pos.x, (float)InputManager::GetInstance().GetMouseY() + Camera::pos.y })) {
 				Damage(30);
 			}
-		}
+		}*/
 	}
 	else {
 		if (deathTimer.Get() > 5) {
 			associated.RequestDelete();
+			zombieCounter--;
+		}
+		else {
+			//std::cout << "removes collider hopefully\n";
+			associated.RemoveComponent(associated.GetComponent("Collider"));
+			//std::cout << "removed collider hopefully\n";
 		}
 	}
 	return;
@@ -71,4 +124,11 @@ bool Zombie::Is(std::string type){
 		return true;
 	}
 	return false;
+}
+
+void Zombie::NotifyCollision(GameObject& other) {
+	if ((other.GetComponent("Bullet") != nullptr)) {
+		Damage( ((Bullet*)other.GetComponent("Bullet"))->GetDamage());
+	}
+	return;
 }

@@ -11,6 +11,11 @@
 #include "Camera.h"
 #include "Character.h"
 #include "PlayerController.h"
+#include "Collision.h"
+#include "Collider.h"
+#include "WaveSpawner.h"
+
+#define PI 3.1415926
 
 State::State(){
 	quitRequested=false;
@@ -40,6 +45,11 @@ State::State(){
 	pc->box.y = 1280;
 	Camera::Follow(pc);
 	AddObject(pc);
+	//wave spawner
+	GameObject* ws = new GameObject();
+	WaveSpawner* newws = new WaveSpawner((*ws));
+	ws->AddComponent(newws);
+	AddObject(ws);
 	return;
 }
 
@@ -64,7 +74,7 @@ void State::Update(float dt){
 	if (InputManager::GetInstance().QuitRequested()) {
 		quitRequested = true;
 	}
-	if (InputManager::GetInstance().KeyPress(' ')) {
+	/*if (InputManager::GetInstance().KeyPress(' ')) {
 		//zombie
 		GameObject* zombs = new GameObject();
 		Zombie* newzomb = new Zombie((*zombs));
@@ -72,11 +82,30 @@ void State::Update(float dt){
 		zombs->box.x = InputManager::GetInstance().GetMouseX() + Camera::pos.x;
 		zombs->box.y = InputManager::GetInstance().GetMouseY() + Camera::pos.y;
 		AddObject(zombs);
-	}
-	long unsigned int index;
+	}*/
 	Camera::Update(dt);
+	long unsigned int index;
+	long unsigned int indexaux;
 	for (index = 0; index < objectArray.size(); index++) {
 		objectArray[index]->Update(dt);
+	}
+	for (index = 0; index < objectArray.size(); index++) {
+		if (objectArray[index]->GetComponent("Collider") != nullptr) {
+			for (indexaux = index; indexaux < objectArray.size(); indexaux++) {
+				if (indexaux != index) {
+					if (objectArray[indexaux]->GetComponent("Collider") != nullptr) {
+						if (Collision::IsColliding(((Collider*)objectArray[index]->GetComponent("Collider"))->box,
+							((Collider*)objectArray[indexaux]->GetComponent("Collider"))->box,
+							(objectArray[index]->angleDeg / 360) * 2 * PI,
+							(objectArray[indexaux]->angleDeg / 360) * 2 * PI)) {
+							objectArray[index]->NotifyCollision(*objectArray[indexaux]);
+							objectArray[indexaux]->NotifyCollision(*objectArray[index]);
+
+						}
+					}
+				}
+			}
+		}
 	}
 	for (index = 0; index < objectArray.size(); index++) {
 		if (objectArray[index]->IsDead()) {

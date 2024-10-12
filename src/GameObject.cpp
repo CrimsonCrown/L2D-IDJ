@@ -16,8 +16,11 @@ GameObject::~GameObject(){
 void GameObject::Update(float dt){
 	long unsigned int index;
 	for(index=0;index<components.size();index++){
+		//std::cout << "try updating cpt\n";
 		components[index]->Update(dt);
+		//std::cout << "finish updating cpt\n";
 	}
+	//std::cout << "finished updating GO\n";
 	return;
 }
 
@@ -48,6 +51,9 @@ void GameObject::AddComponent(Component* cpt){
 
 void GameObject::RemoveComponent(Component* cpt){
 	long unsigned int index;
+	if (cpt == nullptr) {
+		return;
+	}
 	for(index=0;index<components.size();index++){
 		if(components[index].get()==cpt){
 			components.erase(components.begin()+index);
@@ -72,5 +78,18 @@ void GameObject::Start(){
 		components[index]->Start();
 	}
 	started=true;
+	return;
+}
+
+void GameObject::NotifyCollision(GameObject& other) {
+	long unsigned int index;
+	index = 0;
+	while(index < components.size()) {
+		//std::cout << "before ncollision\n";
+		components[index]->NotifyCollision(other);
+		//std::cout << "after ncollision\n";
+		index++;
+	}
+	//std::cout << "after ncollision loop\n";
 	return;
 }

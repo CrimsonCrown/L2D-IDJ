@@ -39,12 +39,19 @@ public:
 	};
 	void Issue(Command task);
 	static Character* player;
+	void NotifyCollision(GameObject& other);
+	void Damage(int damage);
+	Vec2 Position();
 private:
+	Sound deathSound;
+	Sound hitSound;
 	std::queue<Command> taskQueue;
 	std::weak_ptr<GameObject> gun;
 	Vec2 speed;
 	float linearSpeed;
 	int hp;
+	Timer hitTimer;
+	bool hitting;
 	Timer deathTimer;
 };
 

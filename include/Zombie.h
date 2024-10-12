@@ -16,11 +16,15 @@
 class Zombie : public Component{
 public:
 	Zombie(GameObject& associated);
+	void Start();
 	void Damage(int damage);
 	void Update(float dt);
 	void Render();
 	bool Is(std::string type);
+	void NotifyCollision(GameObject& other);
+	static int zombieCounter;
 private:
+	bool movingleft;
 	Sound deathSound;
 	Sound hitSound;
 	int hitpoints;

@@ -3,6 +3,7 @@
 #include "SpriteRenderer.h"
 #include "AnimationSetter.h"
 #include "Bullet.h"
+#include "Character.h"
 
 #define PI 3.1415926
 
@@ -42,7 +43,7 @@ void Gun::Update(float dt){
 	//std::cout << "box.x=" << associated.box.x << " box.y=" << associated.box.y << " center.x=" << associated.box.Center().x << " center.y=" << associated.box.Center().y << " chcenter.x=" << ch->box.Center().x << " chcenter.y=" << ch->box.Center().y << "\n" << " ch.x=" << ch->box.x << " ch.y=" << ch->box.y << "\n" << " ch.w=" << ch->box.w << " ch.h=" << ch->box.h << "\n";
 	cdtimer.Update(dt);
 	if (cooldown == 1) {
-		if (cdtimer.Get() > 0.5) {
+		if (cdtimer.Get() > 0.3) {
 			cdtimer.Restart();
 			if (associated.angleDeg > 90 || associated.angleDeg < -90) {
 				((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("reloadingFlip");
@@ -67,7 +68,7 @@ void Gun::Update(float dt){
 		}
 	}
 	else if (cooldown == 3) {
-		if (cdtimer.Get() > 0.5) {
+		if (cdtimer.Get() > 0.2) {
 			cdtimer.Restart();
 			cooldown=0;
 		}
@@ -100,23 +101,43 @@ void Gun::Shoot(Vec2 target){
 		else {
 			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("idle");
 		}
-		std::cout << " t.x : " << target.x << " t.y : " << target.y << " center.x : " << ch->box.x << " center.y : " << ch->box.x << " incline : " << angle << " \n";
+		//std::cout << " t.x : " << target.x << " t.y : " << target.y << " center.x : " << ch->box.x << " center.y : " << ch->box.x << " incline : " << angle << " \n";
 		cooldown = 1;
 		cdtimer.Restart();
 		shotSound.Play(1);
 		//cria bullet
 		GameObject* bullet = new GameObject();
-		Bullet* bulletCpt = new Bullet((*bullet), angle, 600, 40, 3000);
+		bool tp;
+		if (ch->GetComponent("Character") != Character::player) {
+			tp = true;
+		}
+		else {
+			tp = false;
+		}
+		Bullet* bulletCpt = new Bullet((*bullet), angle, 300, 40, 3000, tp);
 		bullet->AddComponent(bulletCpt);
 		Vec2 bulletoffset(associated.box.w / 2, 0);
 		bulletoffset = bulletoffset.Rotate(angle);
 		bullet->box.x = (associated.box.Center().x + bulletoffset.x) - (bullet->box.w / 2);
 		bullet->box.y = (associated.box.Center().y + bulletoffset.y) - (bullet->box.h / 2);
-		//2pi=360
-		//angle=x
-		//(angle*360)/2pi=x
 		bullet->angleDeg = ((angle * 360) / (2 * PI))+90;
 		Game::GetInstance().GetState().AddObject(bullet);
+		//b2
+		GameObject* bullet2 = new GameObject();
+		Bullet* bulletCpt2 = new Bullet((*bullet2), angle+(PI/8), 300, 40, 3000, tp);
+		bullet2->AddComponent(bulletCpt2);
+		bullet2->box.x = (associated.box.Center().x + bulletoffset.x) - (bullet2->box.w / 2);
+		bullet2->box.y = (associated.box.Center().y + bulletoffset.y) - (bullet2->box.h / 2);
+		bullet2->angleDeg = (((angle + (PI / 8)) * 360) / (2 * PI)) + 90;
+		Game::GetInstance().GetState().AddObject(bullet2);
+		//b3
+		GameObject* bullet3 = new GameObject();
+		Bullet* bulletCpt3 = new Bullet((*bullet3), angle - (PI / 8), 300, 40, 3000, tp);
+		bullet3->AddComponent(bulletCpt3);
+		bullet3->box.x = (associated.box.Center().x + bulletoffset.x) - (bullet3->box.w / 2);
+		bullet3->box.y = (associated.box.Center().y + bulletoffset.y) - (bullet3->box.h / 2);
+		bullet3->angleDeg = (((angle - (PI / 8)) * 360) / (2 * PI)) + 90;
+		Game::GetInstance().GetState().AddObject(bullet3);
 	}
 	return;
 }
