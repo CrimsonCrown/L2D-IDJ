@@ -17,10 +17,12 @@
 class WaveSpawner : public Component {
 public:
 	WaveSpawner(GameObject& associated);
+	~WaveSpawner();
 	void Start();
 	void Update(float dt);
 	void Render();
 	bool Is(std::string type);
+	static int wavespawnCounter;
 private:
 	int zombieCounter;
 	Timer zombieCooldownTimer;

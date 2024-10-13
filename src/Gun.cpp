@@ -121,7 +121,7 @@ void Gun::Shoot(Vec2 target){
 		bullet->box.x = (associated.box.Center().x + bulletoffset.x) - (bullet->box.w / 2);
 		bullet->box.y = (associated.box.Center().y + bulletoffset.y) - (bullet->box.h / 2);
 		bullet->angleDeg = ((angle * 360) / (2 * PI))+90;
-		Game::GetInstance().GetState().AddObject(bullet);
+		Game::GetInstance().GetCurrentState().AddObject(bullet);
 		//b2
 		GameObject* bullet2 = new GameObject();
 		Bullet* bulletCpt2 = new Bullet((*bullet2), angle+(PI/8), 300, 40, 3000, tp);
@@ -129,7 +129,7 @@ void Gun::Shoot(Vec2 target){
 		bullet2->box.x = (associated.box.Center().x + bulletoffset.x) - (bullet2->box.w / 2);
 		bullet2->box.y = (associated.box.Center().y + bulletoffset.y) - (bullet2->box.h / 2);
 		bullet2->angleDeg = (((angle + (PI / 8)) * 360) / (2 * PI)) + 90;
-		Game::GetInstance().GetState().AddObject(bullet2);
+		Game::GetInstance().GetCurrentState().AddObject(bullet2);
 		//b3
 		GameObject* bullet3 = new GameObject();
 		Bullet* bulletCpt3 = new Bullet((*bullet3), angle - (PI / 8), 300, 40, 3000, tp);
@@ -137,7 +137,7 @@ void Gun::Shoot(Vec2 target){
 		bullet3->box.x = (associated.box.Center().x + bulletoffset.x) - (bullet3->box.w / 2);
 		bullet3->box.y = (associated.box.Center().y + bulletoffset.y) - (bullet3->box.h / 2);
 		bullet3->angleDeg = (((angle - (PI / 8)) * 360) / (2 * PI)) + 90;
-		Game::GetInstance().GetState().AddObject(bullet3);
+		Game::GetInstance().GetCurrentState().AddObject(bullet3);
 	}
 	return;
 }

@@ -44,9 +44,9 @@ void Character::Start(){
 	associated.AddComponent(newcol);
 	//cria PenguinCannon
 	GameObject* gunBuddy=new GameObject();
-	Gun* newgun=new Gun((*gunBuddy),Game::GetInstance().GetState().GetObjectPtr(&associated));
+	Gun* newgun=new Gun((*gunBuddy),Game::GetInstance().GetCurrentState().GetObjectPtr(&associated));
 	gunBuddy->AddComponent(newgun);
-	gun=Game::GetInstance().GetState().AddObject(gunBuddy);
+	gun=Game::GetInstance().GetCurrentState().AddObject(gunBuddy);
 	return;
 }
 
@@ -60,6 +60,18 @@ void Character::Update(float dt){
 				speed = todo.pos.Normal().Mul(linearSpeed * dt);
 				associated.box = associated.box.Add(speed);
 				moved = true;
+				if (associated.box.x < 640) {
+					associated.box.x = 640;
+				}
+				if (associated.box.x > 1920-74) {
+					associated.box.x = 1920-74;
+				}
+				if (associated.box.y < 512) {
+					associated.box.y = 512;
+				}
+				if (associated.box.y > 2048-83) {
+					associated.box.y = 2048-83;
+				}
 				if (todo.pos.x < 0) {
 					left = true;
 				}

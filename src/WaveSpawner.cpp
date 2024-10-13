@@ -6,6 +6,8 @@
 
 #define PI 3.1415926
 
+int WaveSpawner::wavespawnCounter = 0;
+
 WaveSpawner::WaveSpawner(GameObject& associated) : Component(associated) {
 	zombieCounter = 0;
 	npcCounter = 0;
@@ -13,7 +15,12 @@ WaveSpawner::WaveSpawner(GameObject& associated) : Component(associated) {
 	waves.push_back(Wave(5,3,0,0));
 	waves.push_back(Wave(10, 2,0,0));
 	waves.push_back(Wave(15, 1.5,2,15));
+	wavespawnCounter++;
 	return;
+}
+
+WaveSpawner::~WaveSpawner() {
+	wavespawnCounter--;
 }
 
 void WaveSpawner::Start() {
@@ -50,7 +57,7 @@ void WaveSpawner::Update(float dt) {
 			zombs->AddComponent(newzomb);
 			zombs->box.x = offset.x + Camera::pos.x+600;
 			zombs->box.y = offset.y + Camera::pos.y+450;
-			Game::GetInstance().GetState().AddObject(zombs);
+			Game::GetInstance().GetCurrentState().AddObject(zombs);
 			zombieCooldownTimer.Restart();
 			zombieCounter++;
 		}
@@ -67,7 +74,7 @@ void WaveSpawner::Update(float dt) {
 			npc->AddComponent(newch);
 			npc->box.x = offset.x + Camera::pos.x + 600;
 			npc->box.y = offset.y + Camera::pos.y + 450;
-			Game::GetInstance().GetState().AddObject(npc);
+			Game::GetInstance().GetCurrentState().AddObject(npc);
 			npcCooldownTimer.Restart();
 			npcCounter++;
 		}
