@@ -23,7 +23,7 @@
 StageState::StageState(){
 	quitRequested=false;
 	started = false;
-	music.Open("Recursos/audio/stageState.ogg");
+	music.Open("Recursos/audio/BGM.wav");
 	music.Play();
 	//background
 	GameObject* bg = new GameObject();
