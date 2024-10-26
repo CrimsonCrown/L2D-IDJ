@@ -24,6 +24,11 @@ public:
 private:
 	std::string current;
 	std::unordered_map<std::string, Animation> animations;
+	int frameStart;
+	int frameEnd;
+	float frameTime;
+	int currentFrame;
+	float timeElapsed;
 };
 
 #endif
