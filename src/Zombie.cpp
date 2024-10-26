@@ -1,6 +1,6 @@
 #include "Zombie.h"
 #include "SpriteRenderer.h"
-#include "AnimationSetter.h"
+#include "Animator.h"
 #include "InputManager.h"
 #include "Camera.h"
 #include "Collider.h"
@@ -16,7 +16,7 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 	SpriteRenderer* newspr = new SpriteRenderer(associated, "Recursos/img/Enemy.png", 3, 2);
 	associated.AddComponent(newspr);
 	//newspr->SetAnimation(Animation(0,3,10));
-	AnimationSetter* anims = new AnimationSetter(associated);
+	Animator* anims = new Animator(associated);
 	associated.AddComponent(anims);
 	anims->AddAnimation("walking", Animation(0, 3, 0.5));
 	anims->AddAnimation("walkingLeft", Animation(0, 3, 0.5, SDL_FLIP_HORIZONTAL));
@@ -41,16 +41,16 @@ void Zombie::Damage(int damage){
 	}
 	hitpoints-=damage;
 	if(hitpoints<=0){
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("dead");
+		((Animator*)associated.GetComponent("Animator"))->SetAnimation("dead");
 		deathTimer.Restart();
 		deathSound.Play(1);
 	}
 	else {
 		if (movingleft) {
-			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("hitLeft");
+			((Animator*)associated.GetComponent("Animator"))->SetAnimation("hitLeft");
 		}
 		else {
-			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("hit");
+			((Animator*)associated.GetComponent("Animator"))->SetAnimation("hit");
 		}
 		hitTimer.Restart();
 		hitting = true;
@@ -65,10 +65,10 @@ void Zombie::Update(float dt){
 	if (hitpoints > 0) {
 		if (hitting == true && hitTimer.Get() > 0.5) {
 			if (movingleft) {
-				((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingLeft");
+				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingLeft");
 			}
 			else {
-				((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walking");
+				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walking");
 			}
 			hitting = false;
 		}
@@ -85,11 +85,11 @@ void Zombie::Update(float dt){
 				if (changedDirection) {
 					movingleft = isLeft;
 					if (movingleft) {
-						((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingLeft");
+						((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingLeft");
 						//std::cout << "going left yay!!!\n";
 					}
 					else {
-						((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walking");
+						((Animator*)associated.GetComponent("Animator"))->SetAnimation("walking");
 						//std::cout << "going right? nay!!!\n";
 					}
 				}

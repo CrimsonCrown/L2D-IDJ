@@ -1,7 +1,7 @@
-#include "AnimationSetter.h"
+#include "Animator.h"
 #include "SpriteRenderer.h"
 
-AnimationSetter::AnimationSetter(GameObject& associated) : Component(associated){
+Animator::Animator(GameObject& associated) : Component(associated){
 	frameStart = 0;
 	frameEnd = 0;
 	frameTime = 0;
@@ -10,7 +10,7 @@ AnimationSetter::AnimationSetter(GameObject& associated) : Component(associated)
 	return;
 }
 
-void AnimationSetter::Update(float dt){
+void Animator::Update(float dt){
 	if (frameTime != 0) {
 		timeElapsed += dt;
 		if (timeElapsed > frameTime) {
@@ -25,25 +25,25 @@ void AnimationSetter::Update(float dt){
 	return;
 }
 
-void AnimationSetter::Render(){
+void Animator::Render(){
 	return;
 }
 
-bool AnimationSetter::Is(std::string type){
-	if(type=="AnimationSetter"){
+bool Animator::Is(std::string type){
+	if(type=="Animator"){
 		return true;
 	}
 	return false;
 }
 
-void AnimationSetter::AddAnimation(std::string name, Animation anim) {
+void Animator::AddAnimation(std::string name, Animation anim) {
 	if (animations.find(name) == animations.end()) {
 		animations.insert({ name,anim });
 	}
 	return;
 }
 
-void AnimationSetter::SetAnimation(std::string name) {
+void Animator::SetAnimation(std::string name) {
 	if (animations.find(name) != animations.end()) {
 		if (current != name) {
 			current = name;

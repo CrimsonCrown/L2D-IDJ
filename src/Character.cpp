@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Gun.h"
 #include "SpriteRenderer.h"
-#include "AnimationSetter.h"
+#include "Animator.h"
 #include "Collider.h"
 #include "Bullet.h"
 
@@ -16,7 +16,7 @@ Character::Character(GameObject& associated, std::string sprite) : Component(ass
 	SpriteRenderer* newspr = new SpriteRenderer(associated, sprite, 3, 4);
 	associated.AddComponent(newspr);
 	//newspr->SetAnimation(Animation(0,3,10));
-	AnimationSetter* anims = new AnimationSetter(associated);
+	Animator* anims = new Animator(associated);
 	associated.AddComponent(anims);
 	anims->AddAnimation("walkingRight", Animation(0, 5, 0.2));
 	anims->AddAnimation("walkingLeft", Animation(0, 5, 0.2, SDL_FLIP_HORIZONTAL));
@@ -83,14 +83,14 @@ void Character::Update(float dt){
 		}
 		if (moved) {
 			if (left) {
-				((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingLeft");
+				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingLeft");
 			}
 			else {
-				((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingRight");
+				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingRight");
 			}
 		}
 		else {
-			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("idle");
+			((Animator*)associated.GetComponent("Animator"))->SetAnimation("idle");
 		}
 	}
 	deathTimer.Update(dt);
@@ -144,7 +144,7 @@ void Character::Damage(int damage) {
 	}
 	hp -= damage;
 	if (hp <= 0) {
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("dead");
+		((Animator*)associated.GetComponent("Animator"))->SetAnimation("dead");
 		deathTimer.Restart();
 		deathSound.Play(1);
 	}

@@ -1,5 +1,5 @@
-#ifndef ANIMATIONSETTER_INCLUDE
-#define ANIMATIONSETTER_INCLUDE
+#ifndef ANIMATOR_INCLUDE
+#define ANIMATOR_INCLUDE
 
 #define INCLUDE_SDL
 #define INCLUDE_SDL_MIXER
@@ -13,9 +13,9 @@
 #include "GameObject.h"
 #include "Animation.h"
 
-class AnimationSetter : public Component{
+class Animator : public Component{
 public:
-	AnimationSetter(GameObject& associated);
+	Animator(GameObject& associated);
 	void Update(float dt);
 	void Render();
 	bool Is(std::string type);
