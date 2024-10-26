@@ -23,7 +23,7 @@ public:
 	//void SetAnimation(Animation anim);
 	void SetFrame(int frame, SDL_RendererFlip flip);
 	void SetCameraFollower(bool cf);//falta editor
-	void SetScaleX(float scaleX, float scaleY);//falta editor
+	void SetScale(float scaleX, float scaleY);//falta editor
 private:
 	Sprite sprite;
 	//int frameStart;

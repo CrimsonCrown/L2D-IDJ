@@ -81,10 +81,10 @@ void SpriteRenderer::SetCameraFollower(bool cf) {
 	sprite.cameraFollower = cf;
 }
 
-void SpriteRenderer::SetScaleX(float scaleX, float scaleY) {
+void SpriteRenderer::SetScale(float scaleX, float scaleY) {
 	Vec2 oldCenter = associated.box.Center();
 	Vec2 oldScale = sprite.GetScale();
-	sprite.SetScaleX(scaleX,scaleY);
+	sprite.SetScale(scaleX,scaleY);
 	if (scaleX != 0) {
 		float xmult = scaleX / oldScale.x;
 		associated.box.w = associated.box.w*xmult;

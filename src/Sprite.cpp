@@ -13,7 +13,7 @@ Sprite::Sprite(){
 	frameCountH = 1;
 	cameraFollower = false;
 	flip = SDL_FLIP_NONE;
-	SetScaleX(1,1);
+	SetScale(1,1);
 	return;
 }
 
@@ -24,7 +24,7 @@ Sprite::Sprite(std::string file, int frameCountW, int frameCountH){
 	this->frameCountW = frameCountW;
 	this->frameCountH = frameCountH;
 	flip = SDL_FLIP_NONE;
-	SetScaleX(1, 1);
+	SetScale(1, 1);
 	Open(file);
 	//std::cout << "w2: " << this->frameCountW << " h2: " << this->frameCountH << "\n";
 	return;
@@ -103,7 +103,7 @@ void Sprite::SetFrameCount(int frameCountW, int frameCountH) {
 	this->frameCountH = frameCountH;
 }
 
-void Sprite::SetScaleX(float scaleX, float scaleY) {
+void Sprite::SetScale(float scaleX, float scaleY) {
 	if (scaleX != 0) {
 		scale.x = scaleX;
 	}

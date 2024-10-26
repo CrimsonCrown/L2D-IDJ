@@ -23,7 +23,7 @@ public:
 	void SetFrame(int frame);
 	void SetFrameCount(int frameCountW, int frameCountH);
 	bool cameraFollower;
-	void SetScaleX(float scaleX, float scaleY);
+	void SetScale(float scaleX, float scaleY);
 	Vec2 GetScale();
 	void SetFlip(SDL_RendererFlip flip);
 private:
