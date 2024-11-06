@@ -8,7 +8,6 @@
 #define PI 3.1415926
 
 Gun::Gun(GameObject& associated, std::weak_ptr<GameObject> character) : Component(associated){
-	reloadSound = Sound("Recursos/audio/PumpAction.mp3");
 	//cria sprite
 	SpriteRenderer* newspr = new SpriteRenderer(associated, "Recursos/img/Gun.png", 3, 2);
 	associated.AddComponent(newspr);
@@ -27,7 +26,8 @@ Gun::Gun(GameObject& associated, std::weak_ptr<GameObject> character) : Componen
 	this->character=character;
 	angle=0;
 	cooldown=0;
-	shotSound = Sound("Recursos/audio/Range.wav");
+	reloadSound.Open("Recursos/audio/PumpAction.mp3");
+	shotSound.Open("Recursos/audio/Range.wav");
 	return;
 }
 

@@ -11,7 +11,6 @@
 Character* Character::player;
 
 Character::Character(GameObject& associated, std::string sprite) : Component(associated){
-	deathSound = Sound("Recursos/audio/Dead.wav");
 	//cria sprite
 	SpriteRenderer* newspr = new SpriteRenderer(associated, sprite, 3, 4);
 	associated.AddComponent(newspr);
@@ -27,7 +26,8 @@ Character::Character(GameObject& associated, std::string sprite) : Component(ass
 	hitting = false;
 	linearSpeed=150;
 	hp=100;
-	hitSound = Sound("Recursos/audio/Hit1.wav");
+	deathSound.Open("Recursos/audio/Dead.wav");
+	hitSound.Open("Recursos/audio/Hit1.wav");
 	return;
 }
 

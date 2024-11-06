@@ -11,7 +11,6 @@ int Zombie::zombieCounter = 0;
 
 Zombie::Zombie(GameObject& associated) : Component(associated){
 	hitting = false;
-	deathSound = Sound("Recursos/audio/Dead.wav");
 	hitpoints=100;
 	SpriteRenderer* newspr = new SpriteRenderer(associated, "Recursos/img/Enemy.png", 3, 2);
 	associated.AddComponent(newspr);
@@ -24,7 +23,8 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 	anims->AddAnimation("hit", Animation(4, 4, 0));
 	anims->AddAnimation("hitLeft", Animation(4, 4, 0, SDL_FLIP_HORIZONTAL));
 	anims->SetAnimation("walking");
-	hitSound = Sound("Recursos/audio/Hit0.wav");
+	deathSound.Open("Recursos/audio/Dead.wav");
+	hitSound.Open("Recursos/audio/Hit0.wav");
 	zombieCounter++;
 	movingleft = false;
 	return;
