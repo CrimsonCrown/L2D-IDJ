@@ -33,9 +33,9 @@ public:
 			if (component != nullptr){
 				return component;
 			}
+		}
+		return nullptr;
 	}
-	return nullptr;
-}
 
 	Rect box;
 private:
