@@ -31,10 +31,3 @@ void Zombie::Update(float dt){
 void Zombie::Render(){
 	return;
 }
-
-bool Zombie::Is(std::string type){
-	if(type=="Zombie"){
-		return true;
-	}
-	return false;
-}
