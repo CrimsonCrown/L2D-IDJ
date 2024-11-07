@@ -19,7 +19,6 @@ public:
 	void Damage(int damage);
 	void Update(float dt);
 	void Render();
-	bool Is(std::string type);
 private:
 	Sound deathSound;
 	Sound hitSound;
