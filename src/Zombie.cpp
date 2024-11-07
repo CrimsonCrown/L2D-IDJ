@@ -18,7 +18,7 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 void Zombie::Damage(int damage){
 	hitpoints-=damage;
 	if(hitpoints<=0){
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("dead");
+		associated.GetComponent<AnimationSetter>()->SetAnimation("dead");
 	}
 	return;
 }

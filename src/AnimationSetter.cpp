@@ -29,6 +29,6 @@ void AnimationSetter::AddAnimation(std::string name, Animation anim) {
 
 void AnimationSetter::SetAnimation(std::string name) {
 	if (animations.find(name) != animations.end()) {
-		((SpriteRenderer*)associated.GetComponent("SpriteRenderer"))->SetAnimation(animations.at(name));
+		associated.GetComponent<SpriteRenderer>()->SetAnimation(animations.at(name));
 	}
 }

@@ -34,3 +34,7 @@ JOGO
 
 # VSCODE
 .vscode/
+
+# Clang files
+.cache
+compile_commands.json
