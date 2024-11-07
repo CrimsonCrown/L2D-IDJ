@@ -10,6 +10,7 @@
 
 #include "Component.h"
 #include "GameObject.h"
+#include "Sound.h"
 
 class Zombie : public Component{
 public:
@@ -18,6 +19,7 @@ public:
 	void Update(float dt);
 	void Render();
 private:
+	Sound deathSound;
 	int hitpoints;
 };
 

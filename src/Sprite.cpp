@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "Game.h"
+#include "Resources.h"
 
 Sprite::Sprite(){
 	texture=nullptr;
@@ -12,7 +13,7 @@ Sprite::Sprite(){
 	return;
 }
 
-Sprite::Sprite(const char* file, int frameCountW, int frameCountH){
+Sprite::Sprite(std::string file, int frameCountW, int frameCountH){
 	texture=nullptr;
 	//std::cout << "w1: " << frameCountW << " h1: " << frameCountH << "\n";
 	this->frameCountW = frameCountW;
@@ -23,21 +24,12 @@ Sprite::Sprite(const char* file, int frameCountW, int frameCountH){
 }
 
 Sprite::~Sprite(){
-	if(texture!=nullptr){
-		SDL_DestroyTexture(texture);
-	}
 	return;
 }
 
-void Sprite::Open(const char* file){
-	if(texture!=nullptr){
-		SDL_DestroyTexture(texture);
-	}
-	texture=IMG_LoadTexture(Game::GetInstance().GetRenderer(),file);
-	if(texture==nullptr){
-		std::cout << SDL_GetError();
-	}
-	SDL_QueryTexture(texture,nullptr,nullptr,&width,&height);
+void Sprite::Open(std::string file){
+	texture = Resources::GetImage(file);
+	SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
 	SetFrame(0);
 	return;
 }
@@ -76,6 +68,10 @@ bool Sprite::IsOpen(){
 }
 
 void Sprite::SetFrame(int frame) {
+	if (frame >= frameCountW*frameCountH) {
+		std::cout << "frame out of range\n";
+		return;
+	}
 	int result = frame / frameCountW;
 	//int result = 0;
 	int remainder = frame % frameCountW;
