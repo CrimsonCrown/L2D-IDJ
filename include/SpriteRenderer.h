@@ -20,6 +20,7 @@ public:
 	void Update(float dt);
 	void Render();
 	void SetAnimation(Animation anim);
+	void SetCameraFollower(bool cf);
 private:
 	Sprite sprite;
 	int frameStart;

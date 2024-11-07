@@ -3,6 +3,8 @@
 #include "SDL_include.h"
 
 #include "Game.h"
+#include "InputManager.h"
+#include "Resources.h"
 
 Game* Game::instance;
 
@@ -78,10 +80,27 @@ SDL_Renderer* Game::GetRenderer(){
 void Game::Run(){
 	while(state->QuitRequested()==false){
 		//std::cout << "in game debug\n";
-		state->Update(0);
+		CalculateDeltaTime();
+		InputManager::GetInstance().Update();
+		state->Update(dt);
 		state->Render();
 		SDL_RenderPresent(renderer);
 		SDL_Delay(33);
 	}
+	Resources::ClearImages();
+	Resources::ClearMusics();
+	Resources::ClearSounds();
 	return;
+}
+
+void Game::CalculateDeltaTime() {
+	int newframestart;
+	newframestart = SDL_GetTicks();
+	dt = (newframestart - frameStart) / 1000.0;
+	frameStart = newframestart;
+	return;
+}
+
+float Game::GetDeltaTime() {
+	return dt;
 }

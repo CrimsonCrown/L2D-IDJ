@@ -1,6 +1,7 @@
 #include "TileMap.h"
 #include <fstream>
 #include "GameObject.h"
+#include "Camera.h"
 
 TileMap::TileMap(GameObject& associated, std::string file, TileSet* tileSet) : Component(associated){
 	//std::cout << "tried to make a map\n";
@@ -16,14 +17,14 @@ void TileMap::Load(std::string file){
 	maptxt >> mapWidth >> comma;
 	maptxt >> mapHeight >> comma;
 	maptxt >> mapDepth >> comma;
-	std::cout << mapWidth << " " << mapHeight << " " << mapDepth << "\n";
+	//std::cout << mapWidth << " " << mapHeight << " " << mapDepth << "\n";
 	tileMatrix.clear();
 	int aux;
 	int i;
 	for(i=0;i<(mapWidth*mapHeight*mapDepth);i++){
 		maptxt >> aux >> comma;
 		//aux--;
-		std::cout << aux << "\n";
+		//std::cout << aux << "\n";
 		tileMatrix.push_back(aux);
 	}
 	maptxt.close();
@@ -50,9 +51,13 @@ void TileMap::Render(){
 void TileMap::RenderLayer(int layer){
 	int x;
 	int y;
+	int offsetMultiplier = (mapDepth-1) - layer;
+	float offset = offsetMultiplier * 0.5;
+	float offsetX = Camera::pos.x*offset;
+	float offsetY = Camera::pos.y*offset;
 	for(x=0;x<mapWidth;x++){
 		for(y=0;y<mapHeight;y++){
-			tileSet->RenderTile(At(x,y,layer),associated.box.x+x*tileSet->GetTileWidth(),associated.box.y+y*tileSet->GetTileHeight());
+			tileSet->RenderTile(At(x,y,layer),associated.box.x+x*tileSet->GetTileWidth()+offsetX,associated.box.y+y*tileSet->GetTileHeight()+offsetY);
 		}
 	}
 	return;

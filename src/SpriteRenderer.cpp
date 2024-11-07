@@ -63,3 +63,7 @@ void SpriteRenderer::SetAnimation(Animation anim) {
 	sprite.SetFrame(currentFrame);
 	timeElapsed = 0;
 }
+
+void SpriteRenderer::SetCameraFollower(bool cf) {
+	sprite.cameraFollower = cf;
+}
