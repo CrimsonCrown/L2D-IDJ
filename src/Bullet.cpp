@@ -26,13 +26,6 @@ void Bullet::Render(){
 	return;
 }
 
-bool Bullet::Is(std::string type){
-	if(type=="Bullet"){
-		return true;
-	}
-	return false;
-}
-
 int Bullet::GetDamage(){
 	return damage;
 }

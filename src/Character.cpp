@@ -58,20 +58,20 @@ void Character::Update(float dt){
 			}
 		}
 		else if (todo.type == Command::SHOOT) {
-			((Gun*)(gun.lock()->GetComponent("Gun")))->Shoot(todo.pos);
+			gun.lock()->GetComponent<Gun>()->Shoot(todo.pos);
 		}
 		taskQueue.pop();
 	}
 	if (moved) {
 		if (left) {
-			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingLeft");
+			associated.GetComponent<AnimationSetter>()->SetAnimation("walkingLeft");
 		}
 		else {
-			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walkingRight");
+			associated.GetComponent<AnimationSetter>()->SetAnimation("walkingRight");
 		}
 	}
 	else {
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("idle");
+		associated.GetComponent<AnimationSetter>()->SetAnimation("idle");
 	}
 	if (hp <= 0 && deathTimer.Get()>3) {
 		associated.RequestDelete();
@@ -81,13 +81,6 @@ void Character::Update(float dt){
 
 void Character::Render(){
 	return;
-}
-
-bool Character::Is(std::string type){
-	if(type=="Character"){
-		return true;
-	}
-	return false;
 }
 
 void Character::Issue(Command task) {
