@@ -18,7 +18,7 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 void Zombie::Damage(int damage){
 	hitpoints-=damage;
 	if(hitpoints<=0){
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("dead");
+		associated.GetComponent<AnimationSetter>()->SetAnimation("dead");
 	}
 	return;
 }
@@ -30,11 +30,4 @@ void Zombie::Update(float dt){
 
 void Zombie::Render(){
 	return;
-}
-
-bool Zombie::Is(std::string type){
-	if(type=="Zombie"){
-		return true;
-	}
-	return false;
 }

@@ -13,13 +13,6 @@ void AnimationSetter::Render(){
 	return;
 }
 
-bool AnimationSetter::Is(std::string type){
-	if(type=="AnimationSetter"){
-		return true;
-	}
-	return false;
-}
-
 void AnimationSetter::AddAnimation(std::string name, Animation anim) {
 	if (animations.find(name) == animations.end()) {
 		animations.insert({ name,anim });
@@ -29,6 +22,6 @@ void AnimationSetter::AddAnimation(std::string name, Animation anim) {
 
 void AnimationSetter::SetAnimation(std::string name) {
 	if (animations.find(name) != animations.end()) {
-		((SpriteRenderer*)associated.GetComponent("SpriteRenderer"))->SetAnimation(animations.at(name));
+		associated.GetComponent<SpriteRenderer>()->SetAnimation(animations.at(name));
 	}
 }
