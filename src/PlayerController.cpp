@@ -27,21 +27,14 @@ void PlayerController::Update(float dt) {
 	if (InputManager::GetInstance().MousePress(SDL_BUTTON_LEFT)) {
 		float x = (float)InputManager::GetInstance().GetMouseX() + Camera::pos.x;
 		float y = (float)InputManager::GetInstance().GetMouseY() + Camera::pos.y;
-		((Character*)associated.GetComponent("Character"))->Issue(Character::Command(Character::Command::SHOOT, x, y));
+		associated.GetComponent<Character>()->Issue(Character::Command(Character::Command::SHOOT, x, y));
 	}
 	if (x != 0 || y != 0) {
-		((Character*)associated.GetComponent("Character"))->Issue(Character::Command(Character::Command::MOVE, x, y));
+		associated.GetComponent<Character>()->Issue(Character::Command(Character::Command::MOVE, x, y));
 	}
 	return;
 }
 
 void PlayerController::Render() {
 	return;
-}
-
-bool PlayerController::Is(std::string type) {
-	if (type == "PlayerController") {
-		return true;
-	}
-	return false;
 }
