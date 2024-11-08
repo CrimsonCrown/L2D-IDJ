@@ -58,11 +58,11 @@ void AIController::Update(float dt) {
 			state = RESTING;
 			restTimer.Restart();
 			destination = Character::player->Position();
-			((Character*)associated.GetComponent("Character"))->Issue(Character::Command(Character::Command::SHOOT, destination.x, destination.y));
+			associated.GetComponent<Character>()->Issue(Character::Command(Character::Command::SHOOT, destination.x, destination.y));
 		}
 		else {
 			Vec2 boxPos = Character::player->Position().Sub(associated.box.Center());
-			((Character*)associated.GetComponent("Character"))->Issue(Character::Command(Character::Command::MOVE, boxPos.x, boxPos.y));
+			associated.GetComponent<Character>()->Issue(Character::Command(Character::Command::MOVE, boxPos.x, boxPos.y));
 		}
 	}
 	return;
@@ -70,11 +70,4 @@ void AIController::Update(float dt) {
 
 void AIController::Render() {
 	return;
-}
-
-bool AIController::Is(std::string type) {
-	if (type == "AIController") {
-		return true;
-	}
-	return false;
 }

@@ -86,10 +86,3 @@ void WaveSpawner::Update(float dt) {
 void WaveSpawner::Render() {
 	return;
 }
-
-bool WaveSpawner::Is(std::string type) {
-	if (type == "WaveSpawner") {
-		return true;
-	}
-	return false;
-}
