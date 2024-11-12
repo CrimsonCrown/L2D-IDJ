@@ -16,6 +16,7 @@
 class Zombie : public Component{
 public:
 	Zombie(GameObject& associated);
+	~Zombie();
 	void Start();
 	void Damage(int damage);
 	void Update(float dt);

@@ -30,6 +30,10 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 	return;
 }
 
+Zombie::~Zombie() {
+	zombieCounter--;
+}
+
 void Zombie::Start() {
 	Collider* newcol = new Collider((associated));
 	associated.AddComponent(newcol);
@@ -104,7 +108,6 @@ void Zombie::Update(float dt){
 	else {
 		if (deathTimer.Get() > 5) {
 			associated.RequestDelete();
-			zombieCounter--;
 		}
 		else {
 			//std::cout << "removes collider hopefully\n";
