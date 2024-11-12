@@ -1,6 +1,6 @@
 #include "Zombie.h"
 #include "SpriteRenderer.h"
-#include "AnimationSetter.h"
+#include "Animator.h"
 #include "InputManager.h"
 #include "Camera.h"
 #include "Collider.h"
@@ -11,12 +11,11 @@ int Zombie::zombieCounter = 0;
 
 Zombie::Zombie(GameObject& associated) : Component(associated){
 	hitting = false;
-	deathSound = Sound("Recursos/audio/Dead.wav");
 	hitpoints=100;
 	SpriteRenderer* newspr = new SpriteRenderer(associated, "Recursos/img/Enemy.png", 3, 2);
 	associated.AddComponent(newspr);
 	//newspr->SetAnimation(Animation(0,3,10));
-	AnimationSetter* anims = new AnimationSetter(associated);
+	Animator* anims = new Animator(associated);
 	associated.AddComponent(anims);
 	anims->AddAnimation("walking", Animation(0, 3, 0.5));
 	anims->AddAnimation("walkingLeft", Animation(0, 3, 0.5, SDL_FLIP_HORIZONTAL));
@@ -24,7 +23,8 @@ Zombie::Zombie(GameObject& associated) : Component(associated){
 	anims->AddAnimation("hit", Animation(4, 4, 0));
 	anims->AddAnimation("hitLeft", Animation(4, 4, 0, SDL_FLIP_HORIZONTAL));
 	anims->SetAnimation("walking");
-	hitSound = Sound("Recursos/audio/Hit0.wav");
+	deathSound.Open("Recursos/audio/Dead.wav");
+	hitSound.Open("Recursos/audio/Hit0.wav");
 	zombieCounter++;
 	movingleft = false;
 	return;
@@ -41,16 +41,16 @@ void Zombie::Damage(int damage){
 	}
 	hitpoints-=damage;
 	if(hitpoints<=0){
-		associated.GetComponent<AnimationSetter>()->SetAnimation("dead");
+		associated.GetComponent<Animator>()->SetAnimation("dead");
 		deathTimer.Restart();
 		deathSound.Play(1);
 	}
 	else {
 		if (movingleft) {
-			associated.GetComponent<AnimationSetter>()->SetAnimation("hitLeft");
+			associated.GetComponent<Animator>()->SetAnimation("hitLeft");
 		}
 		else {
-			associated.GetComponent<AnimationSetter>()->SetAnimation("hit");
+			associated.GetComponent<Animator>()->SetAnimation("hit");
 		}
 		hitTimer.Restart();
 		hitting = true;
@@ -65,10 +65,10 @@ void Zombie::Update(float dt){
 	if (hitpoints > 0) {
 		if (hitting == true && hitTimer.Get() > 0.5) {
 			if (movingleft) {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("walkingLeft");
+				associated.GetComponent<Animator>()->SetAnimation("walkingLeft");
 			}
 			else {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("walking");
+				associated.GetComponent<Animator>()->SetAnimation("walking");
 			}
 			hitting = false;
 		}
@@ -85,11 +85,11 @@ void Zombie::Update(float dt){
 				if (changedDirection) {
 					movingleft = isLeft;
 					if (movingleft) {
-						associated.GetComponent<AnimationSetter>()->SetAnimation("walkingLeft");
+						associated.GetComponent<Animator>()->SetAnimation("walkingLeft");
 						//std::cout << "going left yay!!!\n";
 					}
 					else {
-						associated.GetComponent<AnimationSetter>()->SetAnimation("walking");
+						associated.GetComponent<Animator>()->SetAnimation("walking");
 						//std::cout << "going right? nay!!!\n";
 					}
 				}

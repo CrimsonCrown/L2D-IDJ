@@ -6,20 +6,20 @@
 #include "GameObject.h"
 
 SpriteRenderer::SpriteRenderer(GameObject& associated) : Component(associated), sprite() {
-	frameStart = 0;
+	/*frameStart = 0;
 	frameEnd = 0;
 	frameTime = 0;
 	currentFrame = 0;
-	timeElapsed = 0;
+	timeElapsed = 0;*/
 	return;
 }
 
 SpriteRenderer::SpriteRenderer(GameObject& associated, std::string file, int frameCountW, int frameCountH) : Component(associated), sprite(file, frameCountW, frameCountH) {
-	frameStart = 0;
+	/*frameStart = 0;
 	frameEnd = 0;
 	frameTime = 0;
 	currentFrame = 0;
-	timeElapsed = 0;
+	timeElapsed = 0;*/
 	associated.box.w = sprite.GetWidth();
 	associated.box.h = sprite.GetHeight();
 	return;
@@ -37,7 +37,7 @@ void SpriteRenderer::SetFrameCount(int frameCountW, int frameCountH) {
 }
 
 void SpriteRenderer::Update(float dt) {
-	if (frameTime != 0) {
+	/*if (frameTime != 0) {
 		timeElapsed += dt;
 		if (timeElapsed > frameTime) {
 			timeElapsed -= frameTime;
@@ -47,7 +47,7 @@ void SpriteRenderer::Update(float dt) {
 			}
 			sprite.SetFrame(currentFrame);
 		}
-	}
+	}*/
 	return;
 }
 
@@ -55,24 +55,19 @@ void SpriteRenderer::Render(){
 	sprite.Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h, associated.angleDeg);
 }
 
-void SpriteRenderer::SetAnimation(Animation anim) {
-	frameStart = anim.frameStart;
-	frameEnd = anim.frameEnd;
-	frameTime = anim.frameTime;
-	currentFrame = frameStart;
-	sprite.SetFrame(currentFrame);
-	sprite.SetFlip(anim.flip);
-	timeElapsed = 0;
+void SpriteRenderer::SetFrame(int frame, SDL_RendererFlip flip) {
+	sprite.SetFrame(frame);
+	sprite.SetFlip(flip);
 }
 
 void SpriteRenderer::SetCameraFollower(bool cf) {
 	sprite.cameraFollower = cf;
 }
 
-void SpriteRenderer::SetScaleX(float scaleX, float scaleY) {
+void SpriteRenderer::SetScale(float scaleX, float scaleY) {
 	Vec2 oldCenter = associated.box.Center();
 	Vec2 oldScale = sprite.GetScale();
-	sprite.SetScaleX(scaleX,scaleY);
+	sprite.SetScale(scaleX,scaleY);
 	if (scaleX != 0) {
 		float xmult = scaleX / oldScale.x;
 		associated.box.w = associated.box.w*xmult;

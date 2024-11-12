@@ -2,6 +2,7 @@
 
 Sound::Sound(){
 	chunk=nullptr;
+	channel = 0;
 	return;
 }
 

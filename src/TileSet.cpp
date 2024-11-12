@@ -7,15 +7,17 @@ TileSet::TileSet(int tileWidth, int tileHeight, std::string file){
 	//std::cout <<"tried to make a set\n";
 	tileSet.Open(file);
 	if(tileSet.IsOpen()){
+		tileCount = (tileSet.GetWidth() / tileWidth) * (tileSet.GetHeight() / tileHeight);
 		tileSet.SetFrameCount(tileSet.GetWidth() / tileWidth, tileSet.GetHeight() / tileHeight);
 	}
 	else{
-		std::cout << SDL_GetError();;
+		std::cout << SDL_GetError();
+		tileCount = 0;
 	}
 }
 
 void TileSet::RenderTile(int index, int x, int y){
-	if (index >= 0) {
+	if (index >= 0 && index < tileCount) {
 		tileSet.SetFrame(index);
 		tileSet.Render(x, y, tileWidth, tileHeight);
 	}

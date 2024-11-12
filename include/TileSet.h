@@ -18,6 +18,7 @@ private:
 	Sprite tileSet;
 	int tileWidth;
 	int tileHeight;
+	int tileCount;
 };
 
 #endif

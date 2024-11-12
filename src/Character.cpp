@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Gun.h"
 #include "SpriteRenderer.h"
-#include "AnimationSetter.h"
+#include "Animator.h"
 #include "Collider.h"
 #include "Bullet.h"
 #include "Zombie.h"
@@ -12,12 +12,11 @@
 Character* Character::player;
 
 Character::Character(GameObject& associated, std::string sprite) : Component(associated){
-	deathSound = Sound("Recursos/audio/Dead.wav");
 	//cria sprite
 	SpriteRenderer* newspr = new SpriteRenderer(associated, sprite, 3, 4);
 	associated.AddComponent(newspr);
 	//newspr->SetAnimation(Animation(0,3,10));
-	AnimationSetter* anims = new AnimationSetter(associated);
+	Animator* anims = new Animator(associated);
 	associated.AddComponent(anims);
 	anims->AddAnimation("walkingRight", Animation(0, 5, 0.2));
 	anims->AddAnimation("walkingLeft", Animation(0, 5, 0.2, SDL_FLIP_HORIZONTAL));
@@ -28,7 +27,8 @@ Character::Character(GameObject& associated, std::string sprite) : Component(ass
 	hitting = false;
 	linearSpeed=150;
 	hp=100;
-	hitSound = Sound("Recursos/audio/Hit1.wav");
+	deathSound.Open("Recursos/audio/Dead.wav");
+	hitSound.Open("Recursos/audio/Hit1.wav");
 	return;
 }
 
@@ -84,14 +84,14 @@ void Character::Update(float dt){
 		}
 		if (moved) {
 			if (left) {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("walkingLeft");
+				associated.GetComponent<Animator>()->SetAnimation("walkingLeft");
 			}
 			else {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("walkingRight");
+				associated.GetComponent<Animator>()->SetAnimation("walkingRight");
 			}
 		}
 		else {
-			associated.GetComponent<AnimationSetter>()->SetAnimation("idle");
+			associated.GetComponent<Animator>()->SetAnimation("idle");
 		}
 	}
 	deathTimer.Update(dt);
@@ -138,7 +138,7 @@ void Character::Damage(int damage) {
 	}
 	hp -= damage;
 	if (hp <= 0) {
-		associated.GetComponent<AnimationSetter>()->SetAnimation("dead");
+		associated.GetComponent<Animator>()->SetAnimation("dead");
 		deathTimer.Restart();
 		deathSound.Play(1);
 	}

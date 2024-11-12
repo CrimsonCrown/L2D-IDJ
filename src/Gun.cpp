@@ -1,19 +1,18 @@
 #include "Gun.h"
 #include "Game.h"
 #include "SpriteRenderer.h"
-#include "AnimationSetter.h"
+#include "Animator.h"
 #include "Bullet.h"
 #include "Character.h"
 
 #define PI 3.1415926
 
 Gun::Gun(GameObject& associated, std::weak_ptr<GameObject> character) : Component(associated){
-	reloadSound = Sound("Recursos/audio/PumpAction.mp3");
 	//cria sprite
 	SpriteRenderer* newspr = new SpriteRenderer(associated, "Recursos/img/Gun.png", 3, 2);
 	associated.AddComponent(newspr);
 	//newspr->SetAnimation(Animation(0,3,10));
-	AnimationSetter* anims = new AnimationSetter(associated);
+	Animator* anims = new Animator(associated);
 	associated.AddComponent(anims);
 	anims->AddAnimation("idle", Animation(0, 0, 0));
 	anims->AddAnimation("idleFlip", Animation(0, 0, 0, SDL_FLIP_VERTICAL));
@@ -27,7 +26,8 @@ Gun::Gun(GameObject& associated, std::weak_ptr<GameObject> character) : Componen
 	this->character=character;
 	angle=0;
 	cooldown=0;
-	shotSound = Sound("Recursos/audio/Range.wav");
+	reloadSound.Open("Recursos/audio/PumpAction.mp3");
+	shotSound.Open("Recursos/audio/Range.wav");
 	return;
 }
 
@@ -46,10 +46,10 @@ void Gun::Update(float dt){
 		if (cdtimer.Get() > 0.3) {
 			cdtimer.Restart();
 			if (associated.angleDeg > 90 || associated.angleDeg < -90) {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("reloadingFlip");
+				associated.GetComponent<Animator>()->SetAnimation("reloadingFlip");
 			}
 			else {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("reloading");
+				associated.GetComponent<Animator>()->SetAnimation("reloading");
 			}
 			reloadSound.Play(1);
 			cooldown++;
@@ -59,10 +59,10 @@ void Gun::Update(float dt){
 		if (cdtimer.Get() > 0.5) {
 			cdtimer.Restart();
 			if (associated.angleDeg > 90 || associated.angleDeg < -90) {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("idleFlip");
+				associated.GetComponent<Animator>()->SetAnimation("idleFlip");
 			}
 			else {
-				associated.GetComponent<AnimationSetter>()->SetAnimation("idle");
+				associated.GetComponent<Animator>()->SetAnimation("idle");
 			}
 			cooldown++;
 		}
@@ -89,10 +89,10 @@ void Gun::Shoot(Vec2 target){
 		associated.box = associated.box.Add(Vec2(75, 0).Rotate(angle));
 		associated.angleDeg = ((angle * 360) / (2 * PI));
 		if (associated.angleDeg > 90 || associated.angleDeg < -90) {
-			associated.GetComponent<AnimationSetter>()->SetAnimation("idleFlip");
+			associated.GetComponent<Animator>()->SetAnimation("idleFlip");
 		}
 		else {
-			associated.GetComponent<AnimationSetter>()->SetAnimation("idle");
+			associated.GetComponent<Animator>()->SetAnimation("idle");
 		}
 		//std::cout << " t.x : " << target.x << " t.y : " << target.y << " center.x : " << ch->box.x << " center.y : " << ch->box.x << " incline : " << angle << " \n";
 		cooldown = 1;

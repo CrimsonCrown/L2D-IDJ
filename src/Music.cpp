@@ -1,4 +1,5 @@
 #include "Music.h"
+#include "Resources.h"
 
 Music::Music(){
 	music=nullptr;
@@ -23,14 +24,15 @@ void Music::Play(int times){
 
 void Music::Stop(int msToStop){
 	Mix_FadeOutMusic(msToStop);
+	std::cout << msToStop << " stop the musix\n";
 	return;
 }
 
 void Music::Open(const char* file){
-	if(music!=nullptr){
-		Mix_FreeMusic(music);
-	}
-	music=Mix_LoadMUS(file);
+	//if(music!=nullptr){
+		//Mix_FreeMusic(music);
+	//}
+	music= Resources::GetMusic(file);
 	if(music==nullptr){
 		std::cout << SDL_GetError();
 	}
@@ -46,6 +48,7 @@ bool Music::IsOpen(){
 
 Music::~Music(){
 	Stop();
-	Mix_FreeMusic(music);
+	std::cout << "destroy the musix\n";
+	//Mix_FreeMusic(music);
 	return;
 }
