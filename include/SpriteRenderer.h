@@ -19,7 +19,6 @@ public:
 	void SetFrameCount(int frameCountW, int frameCountH);
 	void Update(float dt);
 	void Render();
-	bool Is(std::string type);
 	void SetAnimation(Animation anim);
 	void SetCameraFollower(bool cf);
 	void SetScaleX(float scaleX, float scaleY);

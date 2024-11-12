@@ -27,12 +27,12 @@ void Zombie::Damage(int damage){
 	}
 	hitpoints-=damage;
 	if(hitpoints<=0){
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("dead");
+		associated.GetComponent<AnimationSetter>()->SetAnimation("dead");
 		deathTimer.Restart();
 		deathSound.Play(1);
 	}
 	else {
-		((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("hit");
+		associated.GetComponent<AnimationSetter>()->SetAnimation("hit");
 		hitTimer.Restart();
 		hitting = true;
 		hitSound.Play(1);
@@ -45,7 +45,7 @@ void Zombie::Update(float dt){
 	deathTimer.Update(dt);
 	if (hitpoints > 0) {
 		if (hitting == true && hitTimer.Get() > 0.5) {
-			((AnimationSetter*)associated.GetComponent("AnimationSetter"))->SetAnimation("walking");
+			associated.GetComponent<AnimationSetter>()->SetAnimation("walking");
 			hitting = false;
 		}
 		if (InputManager::GetInstance().MousePress(SDL_BUTTON_LEFT)) {
@@ -64,11 +64,4 @@ void Zombie::Update(float dt){
 
 void Zombie::Render(){
 	return;
-}
-
-bool Zombie::Is(std::string type){
-	if(type=="Zombie"){
-		return true;
-	}
-	return false;
 }
