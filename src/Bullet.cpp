@@ -2,6 +2,7 @@
 #include "SpriteRenderer.h"
 #include "Collider.h"
 #include "Character.h"
+#include "Zombie.h"
 
 Bullet::Bullet(GameObject& associated, float angle, float speed, int damage, float maxDistance, bool tp) : Component(associated){
 	targetsPlayer = tp;
@@ -34,29 +35,22 @@ void Bullet::Render(){
 	return;
 }
 
-bool Bullet::Is(std::string type){
-	if(type=="Bullet"){
-		return true;
-	}
-	return false;
-}
-
 int Bullet::GetDamage(){
 	return damage;
 }
 
 void Bullet::NotifyCollision(GameObject& other) {
-	if (other.GetComponent("Zombie") != nullptr) {
+	if (other.GetComponent<Zombie>() != nullptr) {
 		associated.RequestDelete();
 	}
-	if (other.GetComponent("Character") != nullptr) {
+	if (other.GetComponent<Character>() != nullptr) {
 		if (targetsPlayer) {
-			if (other.GetComponent("Character") == Character::player) {
+			if (other.GetComponent<Character>() == Character::player) {
 				associated.RequestDelete();
 			}
 		}
 		else {
-			if (other.GetComponent("Character") != Character::player) {
+			if (other.GetComponent<Character>() != Character::player) {
 				associated.RequestDelete();
 			}
 		}

@@ -18,7 +18,6 @@ public:
 	AnimationSetter(GameObject& associated);
 	void Update(float dt);
 	void Render();
-	bool Is(std::string type);
 	void AddAnimation(std::string name, Animation anim);
 	void SetAnimation(std::string name);
 private:

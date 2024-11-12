@@ -90,12 +90,12 @@ void State::Update(float dt){
 		objectArray[index]->Update(dt);
 	}
 	for (index = 0; index < objectArray.size(); index++) {
-		if (objectArray[index]->GetComponent("Collider") != nullptr) {
+		if (objectArray[index]->GetComponent<Collider>() != nullptr) {
 			for (indexaux = index; indexaux < objectArray.size(); indexaux++) {
 				if (indexaux != index) {
-					if (objectArray[indexaux]->GetComponent("Collider") != nullptr) {
-						if (Collision::IsColliding(((Collider*)objectArray[index]->GetComponent("Collider"))->box,
-							((Collider*)objectArray[indexaux]->GetComponent("Collider"))->box,
+					if (objectArray[indexaux]->GetComponent<Collider>() != nullptr) {
+						if (Collision::IsColliding(objectArray[index]->GetComponent<Collider>()->box,
+							objectArray[indexaux]->GetComponent<Collider>()->box,
 							(objectArray[index]->angleDeg / 360) * 2 * PI,
 							(objectArray[indexaux]->angleDeg / 360) * 2 * PI)) {
 							objectArray[index]->NotifyCollision(*objectArray[indexaux]);

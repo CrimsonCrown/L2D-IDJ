@@ -24,7 +24,6 @@ public:
 	int GetHeight();
 	int GetDepth();
 	void Update(float dt){return;}
-	bool Is(std::string type);
 private:
 	std::vector<int> tileMatrix;
 	std::unique_ptr<TileSet> tileSet;

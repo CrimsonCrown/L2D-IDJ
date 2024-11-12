@@ -47,13 +47,6 @@ void Collider::Render() {
 #endif // DEBUG
 }
 
-bool Collider::Is(std::string type){
-	if(type=="Collider"){
-		return true;
-	}
-	return false;
-}
-
 void Collider::SetScale(Vec2 scale){
 	this->scale=scale;
 	return;
