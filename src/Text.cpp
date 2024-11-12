@@ -55,13 +55,6 @@ void Text::Render(){
 	return;
 }
 
-bool Text::Is(std::string type){
-	if(type=="Text"){
-		return true;
-	}
-	return false;
-}
-
 void Text::SetText(std::string text){
 	this->text=text;
 	RemakeTexture();

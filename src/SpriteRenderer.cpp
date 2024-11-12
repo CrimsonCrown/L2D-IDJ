@@ -55,13 +55,6 @@ void SpriteRenderer::Render(){
 	sprite.Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h, associated.angleDeg);
 }
 
-bool SpriteRenderer::Is(std::string type) {
-	if (type == "SpriteRenderer") {
-		return true;
-	}
-	return false;
-}
-
 void SpriteRenderer::SetAnimation(Animation anim) {
 	frameStart = anim.frameStart;
 	frameEnd = anim.frameEnd;

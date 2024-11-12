@@ -24,7 +24,6 @@ public:
 	~Text();
 	void Update(float dt);
 	void Render();
-	bool Is(std::string type);
 	void SetText(std::string text);
 	void SetColor(SDL_Color color);
 	void SetStyle(TextStyle style);
