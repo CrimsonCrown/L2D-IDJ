@@ -55,23 +55,6 @@ void SpriteRenderer::Render(){
 	sprite.Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h, associated.angleDeg);
 }
 
-bool SpriteRenderer::Is(std::string type) {
-	if (type == "SpriteRenderer") {
-		return true;
-	}
-	return false;
-}
-
-/*void SpriteRenderer::SetAnimation(Animation anim) {
-	frameStart = anim.frameStart;
-	frameEnd = anim.frameEnd;
-	frameTime = anim.frameTime;
-	currentFrame = frameStart;
-	sprite.SetFrame(currentFrame);
-	sprite.SetFlip(anim.flip);
-	timeElapsed = 0;
-}*/
-
 void SpriteRenderer::SetFrame(int frame, SDL_RendererFlip flip) {
 	sprite.SetFrame(frame);
 	sprite.SetFlip(flip);

@@ -62,16 +62,6 @@ void GameObject::RemoveComponent(Component* cpt){
 	return;
 }
 
-Component* GameObject::GetComponent(std::string type){
-	long unsigned int index;
-	for(index=0;index<components.size();index++){
-		if(components[index]->Is(type)){
-			return components[index].get();
-		}
-	}
-	return nullptr;
-}
-
 void GameObject::Start(){
 	long unsigned int index;
 	for(index=0;index<components.size();index++){

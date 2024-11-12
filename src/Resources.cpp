@@ -37,6 +37,7 @@ Mix_Music* Resources::GetMusic(std::string file){
 void Resources::ClearMusics(){
 	for(auto it=Resources::musicTable.begin();it!=Resources::musicTable.end();it++){
 		Mix_FreeMusic(std::get<1>(*it));
+		std::cout << "free the musix\n";
 	}
 	Resources::musicTable.clear();
 	return;

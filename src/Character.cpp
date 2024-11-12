@@ -5,6 +5,7 @@
 #include "Animator.h"
 #include "Collider.h"
 #include "Bullet.h"
+#include "Zombie.h"
 
 #define PI 3.1415926
 
@@ -77,20 +78,20 @@ void Character::Update(float dt){
 				}
 			}
 			else if (todo.type == Command::SHOOT) {
-				((Gun*)(gun.lock()->GetComponent("Gun")))->Shoot(todo.pos);
+				gun.lock()->GetComponent<Gun>()->Shoot(todo.pos);
 			}
 			taskQueue.pop();
 		}
 		if (moved) {
 			if (left) {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingLeft");
+				associated.GetComponent<Animator>()->SetAnimation("walkingLeft");
 			}
 			else {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingRight");
+				associated.GetComponent<Animator>()->SetAnimation("walkingRight");
 			}
 		}
 		else {
-			((Animator*)associated.GetComponent("Animator"))->SetAnimation("idle");
+			associated.GetComponent<Animator>()->SetAnimation("idle");
 		}
 	}
 	deathTimer.Update(dt);
@@ -108,30 +109,23 @@ void Character::Render(){
 	return;
 }
 
-bool Character::Is(std::string type){
-	if(type=="Character"){
-		return true;
-	}
-	return false;
-}
-
 void Character::Issue(Command task) {
 	taskQueue.push(task);
 }
 
 void Character::NotifyCollision(GameObject& other) {
-	if (other.GetComponent("Zombie") != nullptr && hitting==false) {
+	if (other.GetComponent<Zombie>() != nullptr && hitting==false) {
 		Damage(10);
 	}
-	if (other.GetComponent("Bullet") != nullptr) {
-		if (((Bullet*)other.GetComponent("Bullet"))->targetsPlayer) {
+	if (other.GetComponent<Bullet>() != nullptr) {
+		if (other.GetComponent<Bullet>()->targetsPlayer) {
 			if (this == player) {
-				Damage(((Bullet*)other.GetComponent("Bullet"))->GetDamage());
+				Damage(other.GetComponent<Bullet>()->GetDamage());
 			}
 		}
 		else {
 			if (this != player) {
-				Damage(((Bullet*)other.GetComponent("Bullet"))->GetDamage());
+				Damage(other.GetComponent<Bullet>()->GetDamage());
 			}
 		}
 	}
@@ -144,7 +138,7 @@ void Character::Damage(int damage) {
 	}
 	hp -= damage;
 	if (hp <= 0) {
-		((Animator*)associated.GetComponent("Animator"))->SetAnimation("dead");
+		associated.GetComponent<Animator>()->SetAnimation("dead");
 		deathTimer.Restart();
 		deathSound.Play(1);
 	}

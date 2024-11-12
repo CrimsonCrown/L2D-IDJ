@@ -22,7 +22,6 @@ public:
 	void Update(float dt);
 	void Start();
 	void Render();
-	bool Is(std::string type);
 	int GetDamage();
 	void NotifyCollision(GameObject& other);
 	bool targetsPlayer;

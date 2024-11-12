@@ -41,16 +41,16 @@ void Zombie::Damage(int damage){
 	}
 	hitpoints-=damage;
 	if(hitpoints<=0){
-		((Animator*)associated.GetComponent("Animator"))->SetAnimation("dead");
+		associated.GetComponent<Animator>()->SetAnimation("dead");
 		deathTimer.Restart();
 		deathSound.Play(1);
 	}
 	else {
 		if (movingleft) {
-			((Animator*)associated.GetComponent("Animator"))->SetAnimation("hitLeft");
+			associated.GetComponent<Animator>()->SetAnimation("hitLeft");
 		}
 		else {
-			((Animator*)associated.GetComponent("Animator"))->SetAnimation("hit");
+			associated.GetComponent<Animator>()->SetAnimation("hit");
 		}
 		hitTimer.Restart();
 		hitting = true;
@@ -65,10 +65,10 @@ void Zombie::Update(float dt){
 	if (hitpoints > 0) {
 		if (hitting == true && hitTimer.Get() > 0.5) {
 			if (movingleft) {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingLeft");
+				associated.GetComponent<Animator>()->SetAnimation("walkingLeft");
 			}
 			else {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("walking");
+				associated.GetComponent<Animator>()->SetAnimation("walking");
 			}
 			hitting = false;
 		}
@@ -85,11 +85,11 @@ void Zombie::Update(float dt){
 				if (changedDirection) {
 					movingleft = isLeft;
 					if (movingleft) {
-						((Animator*)associated.GetComponent("Animator"))->SetAnimation("walkingLeft");
+						associated.GetComponent<Animator>()->SetAnimation("walkingLeft");
 						//std::cout << "going left yay!!!\n";
 					}
 					else {
-						((Animator*)associated.GetComponent("Animator"))->SetAnimation("walking");
+						associated.GetComponent<Animator>()->SetAnimation("walking");
 						//std::cout << "going right? nay!!!\n";
 					}
 				}
@@ -108,7 +108,7 @@ void Zombie::Update(float dt){
 		}
 		else {
 			//std::cout << "removes collider hopefully\n";
-			associated.RemoveComponent(associated.GetComponent("Collider"));
+			associated.RemoveComponent(associated.GetComponent<Collider>());
 			//std::cout << "removed collider hopefully\n";
 		}
 	}
@@ -119,16 +119,9 @@ void Zombie::Render(){
 	return;
 }
 
-bool Zombie::Is(std::string type){
-	if(type=="Zombie"){
-		return true;
-	}
-	return false;
-}
-
 void Zombie::NotifyCollision(GameObject& other) {
-	if ((other.GetComponent("Bullet") != nullptr)) {
-		Damage( ((Bullet*)other.GetComponent("Bullet"))->GetDamage());
+	if (other.GetComponent<Bullet>() != nullptr) {
+		Damage(other.GetComponent<Bullet>()->GetDamage());
 	}
 	return;
 }

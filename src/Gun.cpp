@@ -46,10 +46,10 @@ void Gun::Update(float dt){
 		if (cdtimer.Get() > 0.3) {
 			cdtimer.Restart();
 			if (associated.angleDeg > 90 || associated.angleDeg < -90) {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("reloadingFlip");
+				associated.GetComponent<Animator>()->SetAnimation("reloadingFlip");
 			}
 			else {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("reloading");
+				associated.GetComponent<Animator>()->SetAnimation("reloading");
 			}
 			reloadSound.Play(1);
 			cooldown++;
@@ -59,10 +59,10 @@ void Gun::Update(float dt){
 		if (cdtimer.Get() > 0.5) {
 			cdtimer.Restart();
 			if (associated.angleDeg > 90 || associated.angleDeg < -90) {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("idleFlip");
+				associated.GetComponent<Animator>()->SetAnimation("idleFlip");
 			}
 			else {
-				((Animator*)associated.GetComponent("Animator"))->SetAnimation("idle");
+				associated.GetComponent<Animator>()->SetAnimation("idle");
 			}
 			cooldown++;
 		}
@@ -80,13 +80,6 @@ void Gun::Render(){
 	return;
 }
 
-bool Gun::Is(std::string type){
-	if(type=="Gun"){
-		return true;
-	}
-	return false;
-}
-
 void Gun::Shoot(Vec2 target){
 	if (cooldown == 0) {
 		std::shared_ptr<GameObject> ch = character.lock();
@@ -96,10 +89,10 @@ void Gun::Shoot(Vec2 target){
 		associated.box = associated.box.Add(Vec2(75, 0).Rotate(angle));
 		associated.angleDeg = ((angle * 360) / (2 * PI));
 		if (associated.angleDeg > 90 || associated.angleDeg < -90) {
-			((Animator*)associated.GetComponent("Animator"))->SetAnimation("idleFlip");
+			associated.GetComponent<Animator>()->SetAnimation("idleFlip");
 		}
 		else {
-			((Animator*)associated.GetComponent("Animator"))->SetAnimation("idle");
+			associated.GetComponent<Animator>()->SetAnimation("idle");
 		}
 		//std::cout << " t.x : " << target.x << " t.y : " << target.y << " center.x : " << ch->box.x << " center.y : " << ch->box.x << " incline : " << angle << " \n";
 		cooldown = 1;
@@ -108,7 +101,7 @@ void Gun::Shoot(Vec2 target){
 		//cria bullet
 		GameObject* bullet = new GameObject();
 		bool tp;
-		if (ch->GetComponent("Character") != Character::player) {
+		if (ch->GetComponent<Character>() != Character::player) {
 			tp = true;
 		}
 		else {

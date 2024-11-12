@@ -19,7 +19,7 @@ void Animator::Update(float dt){
 			if (currentFrame > frameEnd) {
 				currentFrame = frameStart;
 			}
-			((SpriteRenderer*)associated.GetComponent("SpriteRenderer"))->SetFrame(currentFrame, animations.at(current).flip);
+			associated.GetComponent<SpriteRenderer>()->SetFrame(currentFrame, animations.at(current).flip);
 		}
 	}
 	return;
@@ -27,13 +27,6 @@ void Animator::Update(float dt){
 
 void Animator::Render(){
 	return;
-}
-
-bool Animator::Is(std::string type){
-	if(type=="Animator"){
-		return true;
-	}
-	return false;
 }
 
 void Animator::AddAnimation(std::string name, Animation anim) {
@@ -54,7 +47,7 @@ void Animator::SetAnimation(std::string name) {
 			frameTime = anim.frameTime;
 			currentFrame = frameStart;
 			//sprite.SetFrame(currentFrame);
-			((SpriteRenderer*)associated.GetComponent("SpriteRenderer"))->SetFrame(currentFrame,anim.flip);
+			associated.GetComponent<SpriteRenderer>()->SetFrame(currentFrame,anim.flip);
 			//sprite.SetFlip(anim.flip);
 			timeElapsed = 0;
 		}

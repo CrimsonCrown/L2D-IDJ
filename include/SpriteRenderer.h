@@ -19,7 +19,6 @@ public:
 	void SetFrameCount(int frameCountW, int frameCountH);//falta de editor
 	void Update(float dt);
 	void Render();
-	bool Is(std::string type);
 	//void SetAnimation(Animation anim);
 	void SetFrame(int frame, SDL_RendererFlip flip);
 	void SetCameraFollower(bool cf);//falta editor
