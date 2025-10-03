@@ -10,6 +10,32 @@ int WaveSpawner::wavespawnCounter = 0;
 
 WaveSpawner::WaveSpawner(GameObject& associated) : Component(associated) {
 	currentWave = 0;
+#ifdef DEBUG
+	waves.push_back(Wave());
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[0].Issue(Wave::Command(Wave::Command::WAIT, 3));
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[0].Issue(Wave::Command(Wave::Command::WAIT, 3));
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves.push_back(Wave());
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves.push_back(Wave());
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 3));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNNPC, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 6));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNNPC, 1));
+#else
 	waves.push_back(Wave());
 	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
 	waves[0].Issue(Wave::Command(Wave::Command::WAIT, 3));
@@ -60,6 +86,7 @@ WaveSpawner::WaveSpawner(GameObject& associated) : Component(associated) {
 	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
 	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 5));
 	waves[2].Issue(Wave::Command(Wave::Command::SPAWNNPC, 1));
+#endif // DEBUG
 	wavespawnCounter++;
 	waiting=false;
 	waitThreshold=0;
