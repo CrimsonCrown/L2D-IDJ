@@ -23,10 +23,9 @@ public:
 	void Render();
 	static int wavespawnCounter;
 private:
-	int zombieCounter;
-	Timer zombieCooldownTimer;
-	int npcCounter;
-	Timer npcCooldownTimer;
+	Timer waitTimer;
+	bool waiting;
+	float waitThreshold;
 	std::vector<Wave> waves;
 	int currentWave;
 };

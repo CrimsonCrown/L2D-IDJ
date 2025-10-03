@@ -9,13 +9,60 @@
 int WaveSpawner::wavespawnCounter = 0;
 
 WaveSpawner::WaveSpawner(GameObject& associated) : Component(associated) {
-	zombieCounter = 0;
-	npcCounter = 0;
 	currentWave = 0;
-	waves.push_back(Wave(5,3,0,0));
-	waves.push_back(Wave(10, 2,0,0));
-	waves.push_back(Wave(15, 1.5,2,15));
+	waves.push_back(Wave());
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[0].Issue(Wave::Command(Wave::Command::WAIT, 3));
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[0].Issue(Wave::Command(Wave::Command::WAIT, 3));
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[0].Issue(Wave::Command(Wave::Command::WAIT, 3));
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[0].Issue(Wave::Command(Wave::Command::WAIT, 3));
+	waves[0].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves.push_back(Wave());
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[1].Issue(Wave::Command(Wave::Command::WAIT, 2));
+	waves[1].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves.push_back(Wave());
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 3));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNNPC, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 3));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 1));
+	waves[2].Issue(Wave::Command(Wave::Command::WAIT, 1.5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNZ, 5));
+	waves[2].Issue(Wave::Command(Wave::Command::SPAWNNPC, 1));
 	wavespawnCounter++;
+	waiting=false;
+	waitThreshold=0;
 	return;
 }
 
@@ -45,44 +92,47 @@ Vec2 GetOffset() {
 }
 
 void WaveSpawner::Update(float dt) {
-	zombieCooldownTimer.Update(dt);
-	npcCooldownTimer.Update(dt);
-	if (zombieCounter < waves[currentWave].zombies) {
-		if (zombieCooldownTimer.Get() >= waves[currentWave].cooldown) {
-			Vec2 offset = GetOffset();
-			//std::cout << "spawnoffset: " << offset.x << " " << offset.y << "\n";
-			//zombie
-			GameObject* zombs = new GameObject();
-			Zombie* newzomb = new Zombie((*zombs));
-			zombs->AddComponent(newzomb);
-			zombs->box.x = offset.x + Camera::pos.x+600;
-			zombs->box.y = offset.y + Camera::pos.y+450;
-			Game::GetInstance().GetCurrentState().AddObject(zombs);
-			zombieCooldownTimer.Restart();
-			zombieCounter++;
+	waitTimer.Update(dt);
+	if(waiting){
+		if(waitTimer.Get()>waitThreshold){
+			waiting=false;
 		}
 	}
-	if (npcCounter < waves[currentWave].npcs) {
-		if (npcCooldownTimer.Get() >= waves[currentWave].npccooldown) {
-			Vec2 offset = GetOffset();
-			//std::cout << "spawnoffset: " << offset.x << " " << offset.y << "\n";
-			//Character
-			GameObject* npc = new GameObject();
-			AIController* newctrl = new AIController((*npc));
-			npc->AddComponent(newctrl);
-			Character* newch = new Character((*npc), "Recursos/img/NPC.png");
-			npc->AddComponent(newch);
-			npc->box.x = offset.x + Camera::pos.x + 600;
-			npc->box.y = offset.y + Camera::pos.y + 450;
-			Game::GetInstance().GetCurrentState().AddObject(npc);
-			npcCooldownTimer.Restart();
-			npcCounter++;
+	while (waves[currentWave].taskQueue.size() > 0 && !waiting) {
+		Wave::Command todo = waves[currentWave].taskQueue.front();
+		if (todo.type == Wave::Command::SPAWNZ) {
+			for(int i=(int)todo.quantity;i>0;i--){
+				Vec2 offset = GetOffset();
+				GameObject* zombs = new GameObject();
+				Zombie* newzomb = new Zombie((*zombs));
+				zombs->AddComponent(newzomb);
+				zombs->box.x = offset.x + Camera::pos.x+600;
+				zombs->box.y = offset.y + Camera::pos.y+450;
+				Game::GetInstance().GetCurrentState().AddObject(zombs);
+			}
 		}
+		else if (todo.type == Wave::Command::SPAWNNPC) {
+			for(int i=(int)todo.quantity;i>0;i--){
+				Vec2 offset = GetOffset();
+				GameObject* npc = new GameObject();
+				AIController* newctrl = new AIController((*npc));
+				npc->AddComponent(newctrl);
+				Character* newch = new Character((*npc), "Recursos/img/NPC.png");
+				npc->AddComponent(newch);
+				npc->box.x = offset.x + Camera::pos.x + 600;
+				npc->box.y = offset.y + Camera::pos.y + 450;
+				Game::GetInstance().GetCurrentState().AddObject(npc);
+			}
+		}
+		else if (todo.type == Wave::Command::WAIT){
+			waitThreshold=todo.quantity;
+			waiting=true;
+			waitTimer.Restart();
+		}
+		waves[currentWave].taskQueue.pop();
 	}
-	if(zombieCounter >= waves[currentWave].zombies && npcCounter >= waves[currentWave].npcs && Zombie::zombieCounter<=0 && AIController::npcCount<=0) {
+	if(Zombie::zombieCounter<=0 && AIController::npcCount<=0 && waves[currentWave].taskQueue.size()<=0) {
 		currentWave++;
-		zombieCounter = 0;
-		npcCounter = 0;
 		if ((unsigned int)currentWave >= waves.size()) {
 			associated.RequestDelete();
 		}
